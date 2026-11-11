@@ -526,3 +526,114 @@ h1,h2,h3,h4{font-weight:700;color:var(--ink)}
  .svc a{grid-template-columns:32px 1fr 20px;column-gap:12px}
 }
 @media (prefers-reduced-motion:reduce){.stage figure,.stage img{transition:none}.dots button.on i::after{animation:none;transform:scaleX(1)}.spec-h.sw div{animation:none}}
+
+/* ============ ĐIỂM NHẤN 2 (11/11/2026) ============ */
+:root{--deep:#0d2536;--amber:#f2a93b;--sky:#62c0ef}
+.top{background:#0a1d2b}
+
+/* Header tối trên hero (trang chủ) */
+.logo .lg2{display:none}
+.hdr{transition:background .35s,border-color .35s,box-shadow .3s}
+.hdr.dk{background:var(--deep);border-color:rgba(255,255,255,.08);box-shadow:none}
+.hdr.dk .logo img{display:none}.hdr.dk .logo .lg2{display:block}
+.hdr.dk .menu>li>a{color:#fff}
+.hdr.dk .menu>li>a:hover{color:var(--sky)}
+.hdr.dk .burger svg{stroke:#fff}
+.hero{background:var(--deep)}
+
+/* Nguyên lý hoạt động: sơ đồ kỹ thuật sáng theo bước khi cuộn */
+.how{position:relative;background:var(--deep);color:#b9c8d3;isolation:isolate}
+.how::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px}
+.how .g{align-items:start;padding-block:var(--sec)}
+.how-t{grid-column:1/6}
+.how-t .lb{color:var(--sky);margin-bottom:16px}
+.how-t h2{color:#fff;margin-bottom:48px}
+.steps-h .st{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:32px 0;min-height:36vh;border-top:1px solid rgba(255,255,255,.12);opacity:.38;cursor:pointer;transition:opacity .4s}
+.steps-h .st.on{opacity:1}
+.steps-h .n{font-size:var(--t4);font-weight:700;color:var(--sky);line-height:28px}
+.steps-h h3{color:#fff;font-size:var(--t5);line-height:1.3;margin-bottom:12px}
+.steps-h p{font-size:var(--t3);line-height:28px;max-width:420px}
+.how-v{grid-column:7/13;position:sticky;top:calc(var(--hh) + 48px)}
+.plan{display:block;width:100%;height:auto;overflow:visible}
+.plan .ln{fill:none;stroke:#8fa7b8;stroke-width:1.6;opacity:.45;transition:stroke .4s,opacity .4s}
+.plan .p.on .ln,.plan[data-s="1"] .p1 .ln,.plan[data-s="2"] .p2 .ln,.plan[data-s="3"] .p3 .ln{stroke:#fff;opacity:1}
+.plan .belt .ln{opacity:.35}
+.plan .tag circle{fill:var(--deep);stroke:#8fa7b8;stroke-width:1.5;transition:fill .4s,stroke .4s}
+.plan .tag text{fill:#fff;font:700 11px Lato,sans-serif;text-anchor:middle}
+.plan .lbt{fill:#8fa7b8;font:700 13px Lato,sans-serif;transition:fill .4s}
+.plan[data-s="1"] .p1 .tag circle,.plan[data-s="2"] .p2 .tag circle,.plan[data-s="3"] .p3 .tag circle{fill:var(--blue);stroke:var(--blue)}
+.plan[data-s="1"] .p1 .lbt,.plan[data-s="2"] .p2 .lbt,.plan[data-s="3"] .p3 .lbt{fill:#fff}
+/* keo trong thùng: luôn có, sáng lên ở bước 1 */
+.plan .glue{fill:var(--amber);opacity:.35;transform-box:fill-box;transform-origin:bottom;transform:scaleY(.55);transition:opacity .6s,transform 1s var(--ease),filter .6s}
+.plan[data-s="1"] .glue{opacity:.95;transform:none;filter:drop-shadow(0 0 10px rgba(242,169,59,.55))}
+.plan .pel circle{fill:#dfe7ec;opacity:.7;transition:opacity .8s,transform .8s var(--ease)}
+.plan[data-s="1"] .pel circle{opacity:0;transform:translateY(14px)}
+.plan .heat path{fill:none;stroke:var(--amber);stroke-width:2;stroke-linecap:round;opacity:0;transition:opacity .4s}
+.plan[data-s="1"] .heat path{opacity:.9;animation:rise 1.4s ease-in-out infinite}
+.plan .heat path:nth-child(2){animation-delay:.2s}.plan .heat path:nth-child(3){animation-delay:.4s}
+@keyframes rise{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* ống dẫn: keo chảy ở bước 2 và 3 */
+.plan .hose{fill:none;stroke:rgba(255,255,255,.14);stroke-width:12;stroke-linecap:round}
+.plan .flow{fill:none;stroke:var(--amber);stroke-width:4;stroke-linecap:round;stroke-dasharray:10 14;opacity:0;transition:opacity .5s}
+.plan[data-s="2"] .flow,.plan[data-s="3"] .flow{opacity:1;animation:flow .8s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-24}}
+/* đầu súng: giọt keo rơi, đường keo vẽ lên nắp thùng ở bước 3 */
+.plan .drop{fill:var(--amber);opacity:0}
+.plan[data-s="3"] .drop{animation:drop .9s ease-in infinite}
+@keyframes drop{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(42px)}}
+.plan .bead{fill:none;stroke:var(--amber);stroke-width:5;stroke-linecap:round;stroke-dasharray:122;stroke-dashoffset:122;transition:stroke-dashoffset 1.6s var(--ease) .2s;filter:drop-shadow(0 0 6px rgba(242,169,59,.6))}
+.plan[data-s="3"] .bead{stroke-dashoffset:0}
+
+/* Thẻ sản phẩm: rê vào thì đổi sang ảnh thứ hai */
+.pc .im{position:relative}
+.pc .im .alt{position:absolute;inset:0;width:100%;height:100%;padding:12%;opacity:0;transition:opacity .4s ease,transform .8s var(--ease)}
+.pc:hover .im img:first-child{opacity:0}
+.pc .im img:first-child{transition:opacity .4s ease,transform .8s var(--ease)}
+.pc:hover .im .alt{opacity:1}
+
+/* Thẻ ngành: chữ đặt trên ảnh */
+.ind{position:relative;border-radius:4px;overflow:hidden;color:#fff}
+.ind .im{aspect-ratio:3/4}
+.ind .im::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,29,43,0) 35%,rgba(10,29,43,.88))}
+.ind .im{position:relative}
+.ind .tx{position:absolute;left:0;right:0;bottom:0;padding:24px}
+.ind h3{color:#fff;margin:0 0 6px}
+.ind p{color:#d3dde4;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s}
+.ind:hover p,.ind:focus-visible p{max-height:96px;opacity:1}
+@media (hover:none){.ind p{max-height:none;opacity:1}}
+.grid3 .ind p{max-height:none;opacity:1}
+
+/* Dịch vụ: nền sáng */
+.svc-sec .svc,.svc-sec .svc a{border-color:var(--line)}
+.svc-sec h3{color:var(--ink)}
+.svc-sec .svc p{color:var(--text)}
+.svc-sec .svc .n{color:var(--blue)}
+.svc-sec .svc .ar{color:var(--mute)}
+.svc-sec .svc a.on h3,.svc-sec .svc a:hover h3{color:var(--blue)}
+.svc-sec .svc a.on .ar{color:var(--blue)}
+.svc-sec .svc-fig{background:var(--soft)}
+
+/* Kêu gọi liên hệ: nền tối bản vẽ */
+.cta{position:relative;background:var(--deep);color:#b9c8d3;isolation:isolate}
+.cta::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px}
+.cta h2,.cta .h5{color:#fff}
+.cta .lb{color:var(--sky)}
+.cta .offs li{border-color:rgba(255,255,255,.14)}
+.cta .offs b{color:#fff}
+.cta .btn.o{color:#fff;border-color:rgba(255,255,255,.5)}
+.cta .btn.o:hover{background:#fff;color:var(--ink)}
+
+@media (max-width:1024px){
+ .how-t,.how-v{grid-column:1/-1}
+ .how-v{grid-row:1;top:var(--hh);z-index:2;background:var(--deep);padding:12px 0;margin:0 calc(var(--gap) * -1);padding-inline:var(--gap);border-bottom:1px solid rgba(255,255,255,.08)}
+ .plan{max-height:34vh}
+ .how-t h2{margin-bottom:24px}
+ .steps-h .st{min-height:44vh}
+}
+@media (max-width:640px){
+ .steps-h .st{grid-template-columns:36px 1fr;padding:24px 0}
+ .steps-h h3{font-size:var(--t4)}
+ .plan .lbt{font-size:15px}
+ .ind .im{aspect-ratio:4/5}
+}
+@media (prefers-reduced-motion:reduce){.plan *{animation:none!important;transition:none!important}}

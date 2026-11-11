@@ -32,7 +32,7 @@
   const hdr = document.createElement('header');
   hdr.className = 'hdr';
   hdr.innerHTML = `<div class="wrap nav">
-    <a class="logo" href="index.html" aria-label="${esc(C.ten)} - Trang chủ"><img src="assets/logo.png" alt="${esc(C.ten)}" width="55" height="52"></a>
+    <a class="logo" href="index.html" aria-label="${esc(C.ten)} - Trang chủ"><img src="assets/logo.png" alt="${esc(C.ten)}" width="55" height="52"><img class="lg2" src="assets/logo-sang.png" alt="" width="55" height="52"></a>
     <ul class="menu">${NAV.map(n => `<li><a href="${n.h}"${n.k === cur ? ' class="on"' : ''}>${n.t}</a>${n.sub ? `<div class="sub">${n.sub.map(s => `<a href="${s.h}">${esc(s.t)}</a>`).join('')}</div>` : ''}</li>`).join('')}</ul>
     <div class="tools"><a class="tel" href="${tel(C.dt[0])}">${I.phone}${C.dt[0]}</a><button class="burger" aria-label="Mở menu" aria-expanded="false">${I.menu}</button></div>
   </div>
@@ -48,8 +48,16 @@
     const o = mn.classList.toggle('open');
     bg.setAttribute('aria-expanded', o); bg.innerHTML = o ? I.close : I.menu;
     document.documentElement.style.overflow = o ? 'hidden' : '';
+    onScroll();
   });
-  addEventListener('scroll', () => hdr.classList.toggle('sc', scrollY > 8), { passive: true });
+  // Trang chủ: header tối liền khối với hero, cuộn qua hero thì về trắng
+  const heroEl = page === 'home' ? document.querySelector('.hero') : null;
+  const onScroll = () => {
+    hdr.classList.toggle('sc', scrollY > 8);
+    if (heroEl) hdr.classList.toggle('dk', !mn.classList.contains('open') && scrollY < heroEl.offsetTop + heroEl.offsetHeight - hdr.offsetHeight);
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   /* ---------- Footer + thanh gọi ---------- */
   const ftr = document.createElement('footer');
@@ -67,8 +75,8 @@
   document.body.append(mb);
 
   /* ---------- Mẩu dùng chung ---------- */
-  const card = (p, d = 0) => `<a class="pc rv" style="--d:${d}s" href="chi-tiet.html?id=${p.id}"><div class="im"><img src="${img(p.anh[0])}" alt="${esc(p.ten)}" loading="lazy"></div><p class="lb">${esc(p.hang || loaiTen(p.loai))}</p><h3>${esc(p.ten)}</h3><span class="q">Liên hệ báo giá${I.arr}</span></a>`;
-  const ind = (n, d = 0) => `<a class="ind rv" style="--d:${d}s" href="ung-dung.html#${n.id}"><div class="im"><img src="assets/img/nganh/${n.id}.jpg" alt="${esc(n.ten)}" loading="lazy"></div><h3>${esc(n.ten)}</h3><p>${esc(n.mo)}</p></a>`;
+  const card = (p, d = 0) => `<a class="pc rv" style="--d:${d}s" href="chi-tiet.html?id=${p.id}"><div class="im"><img src="${img(p.anh[0])}" alt="${esc(p.ten)}" loading="lazy">${p.anh[1] ? `<img class="alt" src="${img(p.anh[1])}" alt="" loading="lazy">` : ''}</div><p class="lb">${esc(p.hang || loaiTen(p.loai))}</p><h3>${esc(p.ten)}</h3><span class="q">Liên hệ báo giá${I.arr}</span></a>`;
+  const ind = (n, d = 0) => `<a class="ind rv" style="--d:${d}s" href="ung-dung.html#${n.id}"><div class="im"><img src="assets/img/nganh/${n.id}.jpg" alt="${esc(n.ten)}" loading="lazy"></div><div class="tx"><h3>${esc(n.ten)}</h3><p>${esc(n.mo)}</p></div></a>`;
   const crumb = (items) => `<nav class="crumb lb"><a href="index.html">Trang chủ</a>${items.map(i => i.h ? `<a href="${i.h}">${esc(i.t)}</a>` : `<span>${esc(i.t)}</span>`).join('')}</nav>`;
   const set = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; return e; };
 
@@ -120,6 +128,15 @@
     const sf = set('svcFig', DV.map((d, i) => `<img${i ? '' : ' class="on"'} src="assets/img/${d.anh}" alt="" loading="lazy"${d.anh.startsWith('nganh') ? ' data-ph' : ''}>`).join(''));
     const pickSvc = i => { svc.querySelectorAll('a').forEach((a, j) => a.classList.toggle('on', j === i)); sf.querySelectorAll('img').forEach((m, j) => m.classList.toggle('on', j === i)); };
     svc.querySelectorAll('a').forEach(a => { a.addEventListener('mouseenter', () => pickSvc(+a.dataset.i)); a.addEventListener('focus', () => pickSvc(+a.dataset.i)); });
+    // Nguyên lý: bước nào nằm giữa màn hình thì sơ đồ sáng phần đó
+    const plan = $('#plan'), steps = document.querySelectorAll('.st');
+    const setStep = n => { plan.dataset.s = n; steps.forEach(s => s.classList.toggle('on', s.dataset.s === String(n))); };
+    if ('IntersectionObserver' in window) {
+      const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setStep(e.target.dataset.s); }), { rootMargin: '-45% 0px -45% 0px' });
+      steps.forEach(s => so.observe(s));
+    }
+    steps.forEach(s => s.addEventListener('click', () => setStep(s.dataset.s)));
+    setStep(1);
     const row = set('homeInd', NGANH.map((n, i) => ind(n, Math.min(i, 3) * .06)).join(''));
     rowNav(row, $('#indPrev'), $('#indNext'));
     set('homeOffs', C.vanPhong.map(v => `<li><b>${esc(v.tp)}</b><span>${esc(v.dc)}</span></li>`).join(''));
